@@ -54,6 +54,7 @@ MANIFEST_PATH=""
 SPARKLE_GENERATE_KEYS=""
 SPARKLE_GENERATE_APPCAST=""
 SPARKLE_SIGN_UPDATE=""
+SPARKLE_PRIVATE_KEY_FILE=""
 MOUNT_POINT=""
 MOUNTED_IMAGE=""
 
@@ -100,8 +101,9 @@ Environment equivalents:
 
 Security:
   The script accepts no Apple ID, app password, API private key, or Sparkle
-  private key argument. Notarization uses a named Keychain profile, and Sparkle
-  signing reads the private Ed25519 key directly from the login Keychain.
+  private key argument. Notarization uses a named Keychain profile. For
+  unattended Sparkle signing, generate_keys exports the selected Keychain item
+  to a mode-0600 release-workspace file that is deleted by the EXIT trap.
 
 The release staging step intentionally removes bundled theme
 Resources/Themes/original-night-city. The source fixture remains untouched.
@@ -170,6 +172,15 @@ cleanup() {
   if [[ -n "$MOUNTED_IMAGE" ]]; then
     /usr/bin/hdiutil detach "$MOUNTED_IMAGE" -force >/dev/null 2>&1 || true
     MOUNTED_IMAGE=""
+  fi
+  if [[ -n "$SPARKLE_PRIVATE_KEY_FILE" ]] && [[ -f "$SPARKLE_PRIVATE_KEY_FILE" ]]; then
+    case "$SPARKLE_PRIVATE_KEY_FILE" in
+      "$WORK_DIR/sparkle-ed25519-private-key")
+        /usr/bin/unlink "$SPARKLE_PRIVATE_KEY_FILE" || warn "failed to delete temporary Sparkle private-key file"
+        ;;
+      *) warn "refusing to remove unexpected Sparkle private-key path" ;;
+    esac
+    SPARKLE_PRIVATE_KEY_FILE=""
   fi
   exit "$exit_code"
 }
@@ -414,6 +425,30 @@ validate_public_sparkle_key() {
   decoded_bytes="$(printf '%s' "$SPARKLE_PUBLIC_ED_KEY" | /usr/bin/base64 -D 2>/dev/null | /usr/bin/wc -c | /usr/bin/tr -d ' ')"
   [[ "$decoded_bytes" == "32" ]] || die "Sparkle public key must be base64 encoding of 32 bytes"
   log "validated Sparkle Ed25519 public key (private key remains in Keychain)"
+}
+
+prepare_sparkle_private_key_file() {
+  local permissions
+  resolve_sparkle_tools
+  if [[ -n "$SPARKLE_PRIVATE_KEY_FILE" ]] && [[ -s "$SPARKLE_PRIVATE_KEY_FILE" ]]; then
+    return
+  fi
+  SPARKLE_PRIVATE_KEY_FILE="$WORK_DIR/sparkle-ed25519-private-key"
+  if is_true "$DRY_RUN"; then
+    log "[dry-run] export Sparkle Keychain item to a temporary mode-0600 signing file"
+    return
+  fi
+  safe_remove "$SPARKLE_PRIVATE_KEY_FILE"
+  /bin/mkdir -p "$WORK_DIR"
+  "$SPARKLE_GENERATE_KEYS" \
+    --account "$SPARKLE_ACCOUNT" \
+    -x "$SPARKLE_PRIVATE_KEY_FILE" >/dev/null
+  /bin/chmod 600 "$SPARKLE_PRIVATE_KEY_FILE"
+  require_file "$SPARKLE_PRIVATE_KEY_FILE"
+  [[ -s "$SPARKLE_PRIVATE_KEY_FILE" ]] || die "Sparkle temporary private-key export is empty"
+  permissions="$(/usr/bin/stat -f '%Lp' "$SPARKLE_PRIVATE_KEY_FILE")"
+  [[ "$permissions" == "600" ]] || die "Sparkle temporary private-key file permissions are $permissions; expected 600"
+  log "prepared temporary Sparkle signing key file; EXIT trap will delete it"
 }
 
 resolve_packages() {
@@ -856,6 +891,7 @@ generate_appcast() {
   require_file "$ZIP_PATH"
   resolve_sparkle_tools
   validate_public_sparkle_key
+  prepare_sparkle_private_key_file
   safe_remove "$UPDATE_DIR"
   safe_remove "$APPCAST_PATH"
   run /bin/mkdir -p "$UPDATE_DIR" "$ARTIFACT_DIR"
@@ -865,7 +901,7 @@ generate_appcast() {
     run /bin/cp "$RELEASE_NOTES_PATH" "$notes_copy"
   fi
   run "$SPARKLE_GENERATE_APPCAST" \
-    --account "$SPARKLE_ACCOUNT" \
+    --ed-key-file "$SPARKLE_PRIVATE_KEY_FILE" \
     --download-url-prefix "$download_prefix" \
     --link "$PROJECT_URL" \
     --embed-release-notes \
@@ -883,6 +919,7 @@ validate_appcast() {
   if is_true "$DRY_RUN"; then
     return
   fi
+  prepare_sparkle_private_key_file
   /usr/bin/xmllint --noout "$APPCAST_PATH"
   signature="$(/usr/bin/xmllint --xpath \
     'string(//*[local-name()="enclosure"]/@*[local-name()="edSignature"])' \
@@ -895,7 +932,11 @@ validate_appcast() {
   [[ "$enclosure_url" == "$PROJECT_URL/releases/download/$TAG/$(/usr/bin/basename "$ZIP_PATH")" ]] || \
     die "unexpected appcast enclosure URL: $enclosure_url"
   [[ "$feed_version" == "$BUILD_NUMBER" ]] || die "appcast build version mismatch: $feed_version"
-  "$SPARKLE_SIGN_UPDATE" --account "$SPARKLE_ACCOUNT" --verify "$ZIP_PATH" "$signature"
+  "$SPARKLE_SIGN_UPDATE" \
+    --ed-key-file "$SPARKLE_PRIVATE_KEY_FILE" \
+    --verify \
+    "$ZIP_PATH" \
+    "$signature"
   log "verified appcast XML, URL, build, and Ed25519 archive signature"
 }
 
