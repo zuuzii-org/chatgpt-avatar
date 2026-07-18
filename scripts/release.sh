@@ -603,19 +603,20 @@ validate_app_metadata() {
 }
 
 validate_app_signature() {
-  local signature_info entitlements
+  local entitlements
+  local sparkle_framework="$STAGED_APP_PATH/Contents/Frameworks/Sparkle.framework"
   require_directory "$STAGED_APP_PATH"
   if is_true "$DRY_RUN"; then
     log "[dry-run] verify strict nested code signatures, Team ID, hardened runtime, and timestamp"
     return
   fi
   /usr/bin/codesign --verify --deep --strict --verbose=2 "$STAGED_APP_PATH"
-  signature_info="$(/usr/bin/codesign -d --verbose=4 "$STAGED_APP_PATH" 2>&1)"
-  [[ "$signature_info" == *"Authority=Developer ID Application:"* ]] || \
-    die "app is not signed with Developer ID Application"
-  [[ "$signature_info" == *"TeamIdentifier=$TEAM_ID"* ]] || die "app signature Team ID mismatch"
-  [[ "$signature_info" == *"Runtime Version="* ]] || die "app signature is missing hardened runtime"
-  [[ "$signature_info" == *"Timestamp="* ]] || die "app signature is missing a secure timestamp"
+  validate_developer_id_component "$sparkle_framework/Versions/B/XPCServices/Installer.xpc" "Sparkle Installer.xpc"
+  validate_developer_id_component "$sparkle_framework/Versions/B/XPCServices/Downloader.xpc" "Sparkle Downloader.xpc"
+  validate_developer_id_component "$sparkle_framework/Versions/B/Autoupdate" "Sparkle Autoupdate"
+  validate_developer_id_component "$sparkle_framework/Versions/B/Updater.app" "Sparkle Updater.app"
+  validate_developer_id_component "$sparkle_framework" "Sparkle.framework"
+  validate_developer_id_component "$STAGED_APP_PATH" "release app"
   entitlements="$(/usr/bin/codesign -d --entitlements :- "$STAGED_APP_PATH" 2>&1 || true)"
   if [[ "$entitlements" == *"com.apple.security.get-task-allow"* ]] && \
      [[ "$entitlements" == *"<true/>"* ]]; then
@@ -623,7 +624,59 @@ validate_app_signature() {
   fi
 }
 
+validate_developer_id_component() {
+  local component="$1"
+  local label="$2"
+  local signature_info
+  [[ -e "$component" ]] || die "$label is missing: $component"
+  /usr/bin/codesign --verify --strict --verbose=2 "$component"
+  signature_info="$(/usr/bin/codesign -d --verbose=4 "$component" 2>&1)"
+  [[ "$signature_info" == *"Authority=Developer ID Application:"* ]] || \
+    die "$label is not signed with Developer ID Application"
+  [[ "$signature_info" == *"TeamIdentifier=$TEAM_ID"* ]] || die "$label signature Team ID mismatch"
+  [[ "$signature_info" == *"Runtime Version="* ]] || die "$label signature is missing hardened runtime"
+  [[ "$signature_info" == *"Timestamp="* ]] || die "$label signature is missing a secure timestamp"
+}
+
 resign_staged_app() {
+  local sparkle_framework="$STAGED_APP_PATH/Contents/Frameworks/Sparkle.framework"
+  require_directory "$sparkle_framework"
+
+  # Sparkle's SPM artifact intentionally ships its helpers ad-hoc signed. An
+  # alternative distribution workflow must re-sign them inside-out before the
+  # framework and host app. Do not use --deep: Downloader.xpc may carry its own
+  # entitlements. See https://sparkle-project.org/documentation/sandboxing/.
+  run /usr/bin/codesign --force \
+    --options runtime \
+    --timestamp \
+    --generate-entitlement-der \
+    --sign "$SIGNING_IDENTITY" \
+    "$sparkle_framework/Versions/B/XPCServices/Installer.xpc"
+  run /usr/bin/codesign --force \
+    --options runtime \
+    --timestamp \
+    --generate-entitlement-der \
+    --preserve-metadata=entitlements \
+    --sign "$SIGNING_IDENTITY" \
+    "$sparkle_framework/Versions/B/XPCServices/Downloader.xpc"
+  run /usr/bin/codesign --force \
+    --options runtime \
+    --timestamp \
+    --generate-entitlement-der \
+    --sign "$SIGNING_IDENTITY" \
+    "$sparkle_framework/Versions/B/Autoupdate"
+  run /usr/bin/codesign --force \
+    --options runtime \
+    --timestamp \
+    --generate-entitlement-der \
+    --sign "$SIGNING_IDENTITY" \
+    "$sparkle_framework/Versions/B/Updater.app"
+  run /usr/bin/codesign --force \
+    --options runtime \
+    --timestamp \
+    --generate-entitlement-der \
+    --sign "$SIGNING_IDENTITY" \
+    "$sparkle_framework"
   run /usr/bin/codesign --force \
     --options runtime \
     --timestamp \
