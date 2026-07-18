@@ -176,7 +176,7 @@ cleanup() {
   if [[ -n "$SPARKLE_PRIVATE_KEY_FILE" ]] && [[ -f "$SPARKLE_PRIVATE_KEY_FILE" ]]; then
     case "$SPARKLE_PRIVATE_KEY_FILE" in
       "$WORK_DIR/sparkle-ed25519-private-key")
-        /usr/bin/unlink "$SPARKLE_PRIVATE_KEY_FILE" || warn "failed to delete temporary Sparkle private-key file"
+        /bin/rm "$SPARKLE_PRIVATE_KEY_FILE" || warn "failed to delete temporary Sparkle private-key file"
         ;;
       *) warn "refusing to remove unexpected Sparkle private-key path" ;;
     esac
