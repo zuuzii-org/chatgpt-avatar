@@ -62,6 +62,7 @@
 		F1F49F6428DA3861674132C6 /* SkinInjectorContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971422C2D0ACAD4510A537A5 /* SkinInjectorContractTests.swift */; };
 		F3D2272F4548DE058B2F0F9C /* RuntimeSecurityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E553EAFE906813E420BF2B8D /* RuntimeSecurityModels.swift */; };
 		F44C3B9A68738225CBBCF2BC /* DevToolsActivePortReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6C151F2C8DF0052B7EEF48 /* DevToolsActivePortReader.swift */; };
+		F95A934D6CA478EACD837D68 /* MenuBarBrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269A7BF904DC46DA288FDA3 /* MenuBarBrandMark.swift */; };
 		F9C11A529AFB5454829BA984 /* SecureIsolatedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425C3FF3DAA6863A099C3E8C /* SecureIsolatedStorage.swift */; };
 		FEB4BD430C893D1EB2F007F1 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4B8FA8BC67EF9E1E05052B /* AdapterTests.swift */; };
 /* End PBXBuildFile section */
@@ -112,6 +113,7 @@
 		971422C2D0ACAD4510A537A5 /* SkinInjectorContractTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinInjectorContractTests.swift; sourceTree = "<group>"; };
 		97B6EF88C57B9ADD59CC7071 /* ChatGPTAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTAdapter.swift; sourceTree = "<group>"; };
 		9BF3AE2AA8BAF790E2EB5227 /* CDPKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDPKitTests.swift; sourceTree = "<group>"; };
+		A269A7BF904DC46DA288FDA3 /* MenuBarBrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarBrandMark.swift; sourceTree = "<group>"; };
 		AA8DC0E2B3FA550375E0B858 /* ThemeImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeImportService.swift; sourceTree = "<group>"; };
 		AA97870A9214B86052E055A9 /* IsolatedDebugRecoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsolatedDebugRecoveryTests.swift; sourceTree = "<group>"; };
 		B3702BF956C54846434EA5C6 /* ChatGPTSkinStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatGPTSkinStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -242,6 +244,7 @@
 				FD2D83F921B08FC1CEE70C41 /* AboutView.swift */,
 				CA0EAD27D1EDA2089AF2BEBE /* AppModel.swift */,
 				6D5373E61A99EEEA14CB1CEC /* ChatGPTSkinStudioApp.swift */,
+				A269A7BF904DC46DA288FDA3 /* MenuBarBrandMark.swift */,
 				DF91BD9ACE938A2E25E38CC4 /* MenuBarView.swift */,
 				B8631324BA1471FDE067B430 /* SoftwareUpdateController.swift */,
 				20C0E7EAB43420212F2FD241 /* StudioView.swift */,
@@ -426,6 +429,7 @@
 				6701567DE18E248922BD1929 /* DiagnosticsLogger.swift in Sources */,
 				EB60ABF46D42E373FA932DC0 /* IsolatedDebugLauncher.swift in Sources */,
 				C3FE582778D90A8D479B6E36 /* JSONValue.swift in Sources */,
+				F95A934D6CA478EACD837D68 /* MenuBarBrandMark.swift in Sources */,
 				D9BCC89E24459E3E8F50D145 /* MenuBarView.swift in Sources */,
 				5C55780270B228AB4389A16B /* ProcessSecurity.swift in Sources */,
 				86BCE60B336E5B997506F9E8 /* ProductionChatGPTRestarter.swift in Sources */,

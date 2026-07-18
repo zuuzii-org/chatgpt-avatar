@@ -24,7 +24,7 @@ struct ChatGPTSkinStudioApp: App {
             MenuBarView(model: model, updater: softwareUpdates.updater)
                 .task { await model.start() }
         } label: {
-            Label("ChatGPT Skin Studio", systemImage: model.isActive ? "paintbrush.fill" : "paintbrush")
+            MenuBarBrandMark(size: 18)
         }
         .menuBarExtraStyle(.window)
         .commands {

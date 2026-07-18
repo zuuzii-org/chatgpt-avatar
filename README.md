@@ -13,6 +13,20 @@
 
 ChatGPT Skin Studio is a source-available macOS utility for people who want a themed ChatGPT desktop experience without patching `app.asar`, replacing the application binary, or changing the official app's code signature. A skin is applied through a user-authorized, loopback-only Chrome DevTools Protocol (CDP) session and can be removed by restoring the native interface.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/assets/screenshots/theme-library-01.png" width="820" alt="ChatGPT Skin Studio theme library showing Rainy Night Headphone Girl, Deep Sea Guardian, DOTA Juggernaut, and Fantasy Westward Journey Swordsman">
+</p>
+
+<p align="center"><em>Theme library — a selected skin is clearly marked, while every card keeps the artwork and supported surface modes visible.</em></p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/theme-library-02.png" width="820" alt="ChatGPT Skin Studio theme library showing Strawberry Bunny Dessert Shop, Minecraft Creeper, Naruto Itachi, and Orbital Mecha">
+</p>
+
+<p align="center"><em>Bundled themes — local image-driven themes remain data-only and are validated before use.</em></p>
+
 ## At a glance
 
 | | v0.1.0 Public Beta |

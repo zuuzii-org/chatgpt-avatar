@@ -28,9 +28,7 @@ struct MenuBarView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 10) {
-                Image(systemName: model.isActive ? "paintbrush.fill" : "paintbrush")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(model.isActive ? StudioVisualTokens.green : StudioVisualTokens.cyan)
+                MenuBarBrandMark(size: 24)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("ChatGPT Skin Studio")
                         .font(.system(size: 14, weight: .semibold))

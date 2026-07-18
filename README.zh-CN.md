@@ -13,6 +13,20 @@
 
 ChatGPT Skin Studio 是一款源码可见的 macOS 工具，面向希望定制 ChatGPT 桌面体验、但不愿修改 `app.asar`、替换 App 二进制或破坏官方代码签名的用户。皮肤通过用户授权的本机 Chrome DevTools Protocol（CDP）会话应用，并可通过“恢复原生界面”撤销。
 
+## 效果图
+
+<p align="center">
+  <img src="docs/assets/screenshots/theme-library-01.png" width="820" alt="ChatGPT Skin Studio 主题库：雨夜耳机少女、深海守护者、DOTA 剑圣与梦幻西游剑侠客">
+</p>
+
+<p align="center"><em>主题库：当前选中主题有清晰状态标识，每张卡片同时展示主题画面与适用页面模式。</em></p>
+
+<p align="center">
+  <img src="docs/assets/screenshots/theme-library-02.png" width="820" alt="ChatGPT Skin Studio 主题库：草莓兔甜点屋、我的世界苦力怕、红月鼬神与轨道机甲">
+</p>
+
+<p align="center"><em>内置主题：图片驱动的本地主题保持纯数据形态，并在使用前完成验证。</em></p>
+
 ## 一览
 
 | | v0.1.0 Public Beta |
