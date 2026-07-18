@@ -29,7 +29,7 @@ ChatGPT Skin Studio 是一款源码可见的 macOS 工具，面向希望定制 C
 
 ## 一览
 
-| | v0.1.1 Public Beta |
+| | v0.1.2 Public Beta |
 |---|---|
 | 运行系统 | macOS 14 或更高版本 |
 | 目标 App | 经过验证的 `/Applications/ChatGPT.app` |

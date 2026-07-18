@@ -6,9 +6,10 @@ struct MenuBarBrandMark: View {
     var body: some View {
         Image("MenuBarMark")
             .resizable()
-            .renderingMode(.original)
+            .renderingMode(.template)
             .scaledToFit()
             .frame(width: size, height: size)
+            .foregroundStyle(.primary)
             .accessibilityLabel("ChatGPT Skin Studio")
     }
 }
