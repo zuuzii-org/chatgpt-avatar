@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 3,
+  "id": "orbital-mecha",
+  "name": "轨道机甲",
+  "nativeTheme": {
+    "accent": "#5EA8E8",
+    "secondary": "#E8863C",
+    "surface": "#080B12",
+    "ink": "#EBF1FA",
+    "muted": "#98A5BC",
+    "success": "#56D6AD",
+    "warning": "#E8C66A",
+    "danger": "#F1788D"
+  },
+  "hero": {
+    "asset": "hero",
+    "focalPoint": {
+      "x": 0.68,
+      "y": 0.28
+    },
+    "safeArea": {
+      "x": 0.02,
+      "y": 0.08,
+      "width": 0.52,
+      "height": 0.8
+    },
+    "adaptiveScrim": {
+      "color": "#080B12",
+      "opacity": 0.36
+    }
+  },
+  "sidebar": {
+    "opacity": 0.78,
+    "blurRadius": 28
+  },
+  "composer": {
+    "opacity": 0.82,
+    "blurRadius": 24
+  },
+  "compatibility": {
+    "adapterProtocol": "chatgpt-macos-renderer",
+    "minimumAPIVersion": 1,
+    "maximumAPIVersion": 1
+  },
+  "assets": {
+    "hero": {
+      "path": "hero.png",
+      "sha256": "1e2b3c6bde7ad42bb75a4209c307e734122cabb5560331e58c28c3d864a68641",
+      "format": "png",
+      "pixelWidth": 1920,
+      "pixelHeight": 1200
+    }
+  },
+  "features": {
+    "homeEnhancer": true,
+    "motion": false,
+    "routeAware": true
+  },
+  "brand": {
+    "mark": {
+      "anchorText": "Codex",
+      "size": 20,
+      "svgViewBox": "0 0 48 48",
+      "svgBody": "<circle cx=\"24\" cy=\"24\" r=\"20.5\" fill=\"#080B12\" fill-opacity=\"0.66\" stroke=\"#5EA8E8\" stroke-width=\"2.4\"/><path d=\"M10 22h28l-4 8H14l-4-8z\" fill=\"#5EA8E8\"/><path d=\"M16 34h16\" stroke=\"#E8863C\" stroke-width=\"2.5\"/>",
+      "glow": true
+    },
+    "wordmarkSuffix": "ORBITAL",
+    "wordmarkSlotPadding": 34
+  },
+  "icons": {
+    "tint": "#5EA8E8",
+    "nav": [
+      {
+        "match": "新建任务",
+        "path": "M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4L12 3z M19 13l1 2.6 2.6 1-2.6 1L19 20l-1-2.4-2.6-1 2.6-1L19 13z"
+      },
+      {
+        "match": "拉取请求",
+        "path": "M6 3a3 3 0 0 1 3 3c0 1.2-.7 2.2-1.7 2.7C7.6 10.4 9 12 11 12h2a4 4 0 0 1 4 4v.3A3 3 0 1 1 15 19v-.3a2 2 0 0 0-2-2h-2c-3.4 0-6-2.6-6-5.9V8.7A3 3 0 1 1 6 3zm12 15a1 1 0 1 0 0 2 1 1 0 0 0 0-2zM6 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+      },
+      {
+        "match": "站点",
+        "path": "M7 18a4.5 4.5 0 1 1 .6-8.97A6 6 0 0 1 19 11.5 3.75 3.75 0 0 1 17.5 18H7z"
+      },
+      {
+        "match": "已安排",
+        "path": "M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 4v10h14V9H5zM8 3v4M16 3v4"
+      },
+      {
+        "match": "插件",
+        "path": "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"
+      },
+      {
+        "match": "项目",
+        "path": "M3 21h18v-2H3v2z M5 19v-7h3v7H5z M10 19V9h4v10h-4z M16 19v-4h3v4h-3z"
+      }
+    ],
+    "suggestions": [
+      {
+        "match": "探索",
+        "path": "M8 6l-5 6 5 6M16 6l5 6-5 6M13 4l-2 16"
+      },
+      {
+        "match": "构建",
+        "path": "M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3L4.3 7.6l5.3-.8L12 2z"
+      },
+      {
+        "match": "审查",
+        "path": "M9 11l3 3 8-8M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"
+      },
+      {
+        "match": "修复",
+        "path": "M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L14 13l-3-3 3.7-3.7z"
+      }
+    ]
+  },
+  "texts": {
+    "composerPlaceholder": "轨道已校准，下达今天的指令…"
+  }
+}

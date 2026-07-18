@@ -1,0 +1,9 @@
+.DS_Store
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+.build/
+ChatGPTSkinStudio.xcodeproj/project.xcworkspace/xcuserdata/
+QAArtifacts/production-e2e/

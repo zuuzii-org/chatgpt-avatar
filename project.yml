@@ -1,0 +1,93 @@
+name: ChatGPTSkinStudio
+
+options:
+  bundleIdPrefix: com.zuuzii
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "14.0"
+
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    exactVersion: 2.9.2
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+    DEVELOPMENT_TEAM: H74633HDAD
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    CLANG_ENABLE_MODULES: YES
+    # Release builds inject the public half only. Sparkle keeps the private key in Keychain.
+    SPARKLE_PUBLIC_ED_KEY: ""
+
+targets:
+  ChatGPTSkinStudio:
+    type: application
+    platform: macOS
+    sources:
+      - path: ChatGPTSkinStudio
+        excludes:
+          - Resources
+      - path: ChatGPTSkinStudio/Resources/Themes
+        type: folder
+        buildPhase: resources
+      - path: ChatGPTSkinStudio/Resources/Injected
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - package: Sparkle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zuuzii.chatgpt-skin-studio
+        PRODUCT_NAME: ChatGPTSkinStudio
+        PRODUCT_MODULE_NAME: ChatGPTSkinStudio
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Config/ChatGPTSkinStudio-Info.plist
+
+  ChatGPTSkinStudioTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: ChatGPTSkinStudioTests
+    dependencies:
+      - target: ChatGPTSkinStudio
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.zuuzii.chatgpt-skin-studio.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  ChatGPTSkinStudio:
+    build:
+      targets:
+        ChatGPTSkinStudio: all
+        ChatGPTSkinStudioTests: [test]
+    test:
+      gatherCoverageData: true
+      targets:
+        - ChatGPTSkinStudioTests
+  ChatGPTSkinStudioLiveE2E:
+    build:
+      targets:
+        ChatGPTSkinStudio: all
+        ChatGPTSkinStudioTests: [test]
+    test:
+      targets:
+        - ChatGPTSkinStudioTests
+      environmentVariables:
+        RUN_CHATGPT_SKIN_E2E: "1"
+
+  ChatGPTSkinStudioProductionE2E:
+    build:
+      targets:
+        ChatGPTSkinStudio: all
+        ChatGPTSkinStudioTests: [test]
+    test:
+      targets:
+        - ChatGPTSkinStudioTests
+      environmentVariables:
+        RUN_CHATGPT_SKIN_PRODUCTION_E2E: "1"
