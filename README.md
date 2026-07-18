@@ -29,7 +29,7 @@ ChatGPT Skin Studio is a source-available macOS utility for people who want a th
 
 ## At a glance
 
-| | v0.1.2 Public Beta |
+| | v0.1.3 Public Beta |
 |---|---|
 | Host | macOS 14 or later |
 | Target app | Verified `/Applications/ChatGPT.app` installation |

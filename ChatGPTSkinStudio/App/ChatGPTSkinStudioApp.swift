@@ -26,7 +26,7 @@ struct ChatGPTSkinStudioApp: App {
         } label: {
             MenuBarBrandMark(size: 18)
         }
-        .menuBarExtraStyle(.window)
+        .menuBarExtraStyle(.menu)
         .commands {
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(updater: softwareUpdates.updater)

@@ -8,6 +8,14 @@ The project follows [Semantic Versioning](https://semver.org/) for published rel
 
 No entries yet.
 
+## [0.1.3] - 2026-07-19
+
+### Changed
+
+- Rebuilt the menu-bar extra as a compact native macOS menu instead of a custom window panel.
+- Reduced the menu to the current theme, primary theme actions, update, About, and Quit; build timestamps no longer compete with primary actions.
+- Replaced the diagonal Skin Peel mark with a lighter stacked-card Template Image that avoids a prohibited-symbol reading.
+
 ## [0.1.0] - 2026-07-18
 
 First public beta.
@@ -46,5 +54,6 @@ First public beta.
 - Third-party franchise references in bundled themes may require separate authorization for redistribution or commercial use.
 - Remote automatic updating requires the corresponding Release to publish both its signed update archive and `appcast.xml`; code integration alone is insufficient.
 
-[Unreleased]: https://github.com/zuuzii-org/chatgpt-avatar/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/zuuzii-org/chatgpt-avatar/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/zuuzii-org/chatgpt-avatar/releases/tag/v0.1.3
 [0.1.0]: https://github.com/zuuzii-org/chatgpt-avatar/releases/tag/v0.1.0

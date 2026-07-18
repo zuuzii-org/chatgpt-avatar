@@ -6,106 +6,89 @@ struct MenuBarView: View {
     let updater: SPUUpdater
     @Environment(\.openWindow) private var openWindow
 
-    /// Version + bundle build time, so a stale duplicate app copy can be
-    /// identified at a glance (2026-07-17: a pre-fix duplicate kept relaunching).
-    private var buildStamp: String {
-        let version = Bundle.main.object(
-            forInfoDictionaryKey: "CFBundleShortVersionString"
-        ) as? String ?? "dev"
-        let mtime = try? Bundle.main.executableURL?
-            .resourceValues(forKeys: [.contentModificationDateKey])
-            .contentModificationDate
-        let stamp = mtime.map { Self.stampFormatter.string(from: $0) } ?? "unknown"
-        return "v\(version) · 构建 \(stamp)"
+    private var visibleTheme: LoadedTheme? {
+        model.activeTheme ?? model.selectedTheme
     }
 
-    private static let stampFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM-dd HH:mm"
-        return formatter
-    }()
+    private var themeStatusTitle: String? {
+        guard let theme = visibleTheme else { return nil }
+        let prefix = model.activeTheme == nil ? "所选主题" : "当前皮肤"
+        return "\(prefix)：\(theme.manifest.name)"
+    }
+
+    private var applyTitle: String {
+        model.isActive ? "切换到所选主题" : "应用所选主题…"
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 10) {
-                MenuBarBrandMark(size: 24)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("ChatGPT Skin Studio")
-                        .font(.system(size: 14, weight: .semibold))
-                    Text(model.state.title)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(buildStamp)
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(.tertiary)
-                }
-                Spacer()
-            }
-
-            if let theme = model.activeTheme ?? model.selectedTheme {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(model.activeTheme == nil ? "所选主题" : "当前皮肤")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                        Text(theme.manifest.name)
-                            .lineLimit(1)
-                    }
-                    Spacer()
-                }
-            }
-
-            Divider()
-
-            Button("打开主题库") {
-                openWindow(id: "studio")
-                NSApp.activate(ignoringOtherApps: true)
-            }
-            .keyboardShortcut(",", modifiers: .command)
-
-            if model.isActive {
-                if model.canApply {
-                    Button("无重启切换到所选主题") {
-                        model.requestApply()
-                    }
-                }
-                Button("恢复原生界面") {
-                    model.requestRestore()
-                    openWindow(id: "studio")
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-            } else {
-                Button("应用所选主题…") {
-                    model.requestApply()
-                    openWindow(id: "studio")
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-                .disabled(!model.canApply)
-            }
-
-            Divider()
-
-            CheckForUpdatesView(updater: updater)
-
-            Button("关于 ChatGPT Skin Studio") {
-                openWindow(id: "about")
-                NSApp.activate(ignoringOtherApps: true)
-            }
-
-            Divider()
-
-            if model.isActive {
-                Text("退出前建议先恢复原生界面；否则需手动重启 ChatGPT 才会清理调试 listener。")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Button(model.isActive ? "退出 Controller（皮肤保持）" : "退出 Skin Studio") {
-                NSApp.terminate(nil)
-            }
+        if let themeStatusTitle {
+            Label(
+                themeStatusTitle,
+                systemImage: model.activeTheme == nil ? "paintpalette" : "paintbrush.pointed.fill"
+            )
+            .disabled(true)
+        } else {
+            Label("尚未选择主题", systemImage: "paintpalette")
+                .disabled(true)
         }
-        .padding(16)
-        .frame(width: 310)
+
+        Divider()
+
+        Button {
+            openStudio()
+        } label: {
+            Label("打开主题库", systemImage: "square.grid.2x2")
+        }
+        .keyboardShortcut(",", modifiers: .command)
+
+        if model.isActive {
+            if model.canApply {
+                Button {
+                    model.requestApply()
+                } label: {
+                    Label(applyTitle, systemImage: "arrow.triangle.2.circlepath")
+                }
+            }
+
+            Button {
+                model.requestRestore()
+                openStudio()
+            } label: {
+                Label("恢复原生界面", systemImage: "arrow.counterclockwise")
+            }
+        } else {
+            Button {
+                model.requestApply()
+                openStudio()
+            } label: {
+                Label(applyTitle, systemImage: "paintbrush.pointed")
+            }
+            .disabled(!model.canApply)
+        }
+
+        Divider()
+
+        CheckForUpdatesView(updater: updater)
+
+        Button {
+            openWindow(id: "about")
+            NSApp.activate(ignoringOtherApps: true)
+        } label: {
+            Label("关于 ChatGPT Skin Studio", systemImage: "info.circle")
+        }
+
+        Divider()
+
+        Button {
+            NSApp.terminate(nil)
+        } label: {
+            Label("退出 ChatGPT Skin Studio", systemImage: "power")
+        }
+        .keyboardShortcut("q")
+    }
+
+    private func openStudio() {
+        openWindow(id: "studio")
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
